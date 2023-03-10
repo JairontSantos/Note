@@ -1,6 +1,6 @@
 # Projeto biblioteca
 
-class Livros:
+class Livro:
 
 
     def __init__(self, prev=None, next=None, name=None, author=None):
@@ -9,12 +9,12 @@ class Livros:
         self.name = name
         self.author = author
 
-class Biblioteca:
+class Estante:
     def __init__(self):
         self.head = None
         self.tail = None
 
-    def append(self, new_livro=Livros):
+    def append(self, new_livro: Livro):
         if self.head is None:
             self.head = new_livro
             self.tail = new_livro
@@ -24,7 +24,15 @@ class Biblioteca:
         self.tail.next = new_livro
         self.tail = new_livro
 
-    def prepend(self, new_livro=Livros):
+    def prepend(self, new_livro: Livro):
+
+        if self.head is None:
+            print('=' * 55)
+            print(f'Você está colocando o primeiro livro na prateleira! Obrigado!')
+            print('=' * 55)
+        else: 
+            print(f'Você está colocando o livro: {self.head.name}, do autor: {self.head.author}, no inicio da prateleira! Obrigado! ')
+            print('=' * 55)
 
         if self.head is None:
             self.head = new_livro
@@ -34,26 +42,24 @@ class Biblioteca:
         new_livro.next = self.head
         self.head.prev = new_livro
         self.head = new_livro
-        if self.head.next is not None:
-            print('=' * 50)
-            print(f'Você está colocando o livro {self.head.next.name} do autor {self.head.next.author} no inicio da prateleira! Obrigado! ')
-            print('=' * 50)
-        else:
-            print('=' * 50)
-            print(f'Você está colocando o primeiro livro na prateleira! Obrigado! ')
-            print('=' * 50)
 
     def revision(self):
+        contagem = 0
         current = self.head
         while current is not None:
             print(f'O nome do livro é: {current.name}')
             print(f'E seu autor é : {current.author}')
             current = current.next
+            print('=' * 55)
+            contagem += 1
+            print(f'Estamos no momento com {contagem} livros na estante')
 
-list = Biblioteca()
+estante = Estante()
 
-li = Livros(name='Alice', author='JK Rowling')
+li = Livro(name='Alice', author='JK Rowling')
+li2 = Livro(name='Academia do Grego', author='Platão')
 
-list.prepend(li)
+estante.prepend(li)
+estante.prepend(li2)
 
-list.revision()
+estante.revision()
