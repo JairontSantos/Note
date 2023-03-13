@@ -1,5 +1,7 @@
 # Projeto biblioteca
 
+import time
+
 class Livro:
 
     def __init__(self, prev=None, next=None, name=None, author=None):
@@ -129,7 +131,7 @@ estante = Estante()
 
 def menu():
     print('=' * 55)
-    print('Bem vindo a biblioteca!')
+    print('Bem vindo a Estante Virtual!')
     print('=' * 55)
     print('Escolha uma opção:')
     print('1 - Adicionar um livro no final da estante')
@@ -151,26 +153,38 @@ def main():
             author = input('Digite o nome do autor: ')
             livro = Livro(name=name, author=author)
             estante.append(livro)
+            tempo()
         elif opcao == 2:
             name = input('Digite o nome do livro: ')
             author = input('Digite o nome do autor: ')
             livro = Livro(name=name, author=author)
             estante.prepend(livro)
+            tempo()
         elif opcao == 3:
             estante.remove_last()
+            tempo()
         elif opcao == 4:
             estante.remove_first()
+            tempo()
         elif opcao == 5:
             name = input('Digite o nome do livro: ')
             estante.search(name)
+            tempo()
         elif opcao == 6:
             name = input('Digite o nome do livro: ')
             estante.remove(name)
+            tempo()
         elif opcao == 7:
             estante.revision()
+            tempo()
         elif opcao == 8:
             break
         else:
             print('Opção inválida!')
+            tempo()
+
+def tempo():
+    time.sleep(3)
+
 
 main()
