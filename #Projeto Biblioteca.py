@@ -83,33 +83,94 @@ class Estante:
         self.head = self.head.next
         self.head.prev = None
 
+    def search(self, name):
+        current = self.head
+        while current is not None:
+            if current.name == name:
+                print(f'O livro {current.name} foi encontrado!')
+                print('=' * 55)
+                return current
+            current = current.next
+        print(f'O livro {name} não foi encontrado!')
+        print('=' * 55)
+        return None
+
+    def remove(self, name):
+        livro = self.search(name)
+        if livro is None:
+            return
+        if livro.prev is None:
+            self.remove_first()
+            return
+        if livro.next is None:
+            self.remove_last()
+            return
+        livro.prev.next = livro.next
+        livro.next.prev = livro.prev
+        print(f'O livro {livro.name} foi removido!')
+        print('=' * 55)
+        return livro
+
     def revision(self):
         current = self.head
         contagem = 0
         while current is not None:
+            print('=' * 55)
             print(f'O nome do livro é: {current.name}')
             print(f'E seu autor é : {current.author}')
             print('=' * 55)
             current = current.next
             contagem += 1
+        print('=' * 55)
         print(f'A quantidade de livros na estante é {contagem}!')
         print('=' * 55)
 
-list = Estante()
+estante = Estante()
 
-li = Livro(name='Alice', author='JK Rowling')
-li1 = Livro(name='Minecraft', author='N/A')
-li2 = Livro(name='JoJo', author='Araki')
-li3 = Livro(name='1984', author='Não sei')
+def menu():
+    print('=' * 55)
+    print('Bem vindo a biblioteca!')
+    print('=' * 55)
+    print('Escolha uma opção:')
+    print('1 - Adicionar um livro no final da estante')
+    print('2 - Adicionar um livro no começo da estante')
+    print('3 - Remover um livro do final da estante')
+    print('4 - Remover um livro do começo da estante')
+    print('5 - Procurar um livro')
+    print('6 - Remover um livro')
+    print('7 - Listar os livros')
+    print('8 - Sair')
+    print('=' * 55)
 
-list.prepend(li)
-list.prepend(li2)
-list.prepend(li1)
-list.append(li3)
+def main():
+    while True:
+        menu()
+        opcao = int(input('Digite a opção desejada: '))
+        if opcao == 1:
+            name = input('Digite o nome do livro: ')
+            author = input('Digite o nome do autor: ')
+            livro = Livro(name=name, author=author)
+            estante.append(livro)
+        elif opcao == 2:
+            name = input('Digite o nome do livro: ')
+            author = input('Digite o nome do autor: ')
+            livro = Livro(name=name, author=author)
+            estante.prepend(livro)
+        elif opcao == 3:
+            estante.remove_last()
+        elif opcao == 4:
+            estante.remove_first()
+        elif opcao == 5:
+            name = input('Digite o nome do livro: ')
+            estante.search(name)
+        elif opcao == 6:
+            name = input('Digite o nome do livro: ')
+            estante.remove(name)
+        elif opcao == 7:
+            estante.revision()
+        elif opcao == 8:
+            break
+        else:
+            print('Opção inválida!')
 
-list.remove_last()
-list.remove_last()
-list.remove_first()
-
-
-list.revision()
+main()
