@@ -83,7 +83,6 @@ class Estante:
         print('='* 55)
 
         self.head = self.head.next
-        self.head.prev = None
 
     def search(self, name):
         current = self.head
