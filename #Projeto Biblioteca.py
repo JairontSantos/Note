@@ -1,5 +1,3 @@
-# Projeto biblioteca
-
 import time
 
 class Livro:
@@ -14,6 +12,7 @@ class Estante:
     def __init__(self):
         self.head = None
         self.tail = None
+        self.length = 0
 
     def append(self, new_livro:Livro):
 
@@ -24,11 +23,13 @@ class Estante:
         if self.head is None:
             self.head = new_livro
             self.tail = new_livro
+            self.length += 1
             return
 
         new_livro.prev = self.tail
         self.tail.next = new_livro
         self.tail = new_livro
+        self.length += 1
 
         print('=' * 55)
         print(f'Você está colocando o livro {self.tail.name} do autor {self.tail.author} no final da prateleira! Obrigado! ')
@@ -40,11 +41,13 @@ class Estante:
             print(f'Você está colocando o primeiro livro na prateleira! Obrigado! ')
             self.head = new_livro
             self.tail = new_livro
+            self.length += 1
             return
 
         new_livro.next = self.head
         self.head.prev = new_livro
         self.head = new_livro
+        self.length += 1
 
         print('=' * 55)
         print(f'Você está colocando o livro {self.head.name} do autor {self.head.author} no inicio da prateleira! Obrigado! ')
@@ -111,6 +114,26 @@ class Estante:
         print(f'O livro {livro.name} foi removido!')
         print('=' * 55)
         return livro
+    
+    def add_node_at_index(self, index, name, author):
+        if index < 0 or index > self.length:
+            return None
+        elif index == 0:
+            new_livro = Livro(name=name, author=author)
+            self.prepend(new_livro)
+        elif index == self.length:
+            new_livro = Livro(name=name, author=author)
+            self.append(new_livro)
+        else:
+            new_livro = Livro(name=name, author=author)
+            current_node = self.head
+            for i in range(index - 1):  # Subtrair 1 para parar no nó anterior
+                current_node = current_node.next
+            new_livro.prev = current_node
+            new_livro.next = current_node.next
+            current_node.next.prev = new_livro
+            current_node.next = new_livro
+            self.length += 1
 
     def revision(self):
         current = self.head
@@ -125,22 +148,51 @@ class Estante:
         print('=' * 55)
         print(f'A quantidade de livros na estante é {contagem}!')
         print('=' * 55)
+    
+    def remove_at_index(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        elif index == 0:
+            self.remove_first()
+        elif index == self.length - 1:
+            self.remove_last()
+        else:
+            current_node = self.head
+            for i in range(index):
+                current_node = current_node.next
+            current_node.prev.next = current_node.next
+            current_node.next.prev = current_node.prev
+            print(f'O livro {current_node.name} foi removido do índice {index}!')
+            print('=' * 55)
+            self.length -= 1
 
 estante = Estante()
 
 def menu():
     print('=' * 55)
-    print('Bem vindo a Estante Virtual!')
+    print('Bem vindo a sua estante de livros!')
     print('=' * 55)
-    print('Escolha uma opção:')
+    print('O que você deseja fazer?')
+    print('=' * 55)
     print('1 - Adicionar um livro no final da estante')
-    print('2 - Adicionar um livro no começo da estante')
+    print('=' * 55)
+    print('2 - Adicionar um livro no inicio da estante')
+    print('=' * 55)
     print('3 - Remover um livro do final da estante')
-    print('4 - Remover um livro do começo da estante')
-    print('5 - Procurar um livro')
-    print('6 - Remover um livro')
-    print('7 - Listar os livros')
-    print('8 - Sair')
+    print('=' * 55)
+    print('4 - Remover um livro do inicio da estante')
+    print('=' * 55)
+    print('5 - Procurar um livro na estante')
+    print('=' * 55)
+    print('6 - Remover um livro da estante')
+    print('=' * 55)
+    print('7 - Adicionar um livro em uma posição especifica da estante')
+    print('=' * 55)
+    print('8 - Revisar a estante')
+    print('=' * 55)
+    print('9 - Remover um livro de uma posição especifica da estante')
+    print('=' * 55)
+    print('10 - Sair do programa')
     print('=' * 55)
 
 def main():
@@ -150,14 +202,14 @@ def main():
         if opcao == 1:
             name = input('Digite o nome do livro: ')
             author = input('Digite o nome do autor: ')
-            livro = Livro(name=name, author=author)
-            estante.append(livro)
+            new_livro = Livro(name=name, author=author)
+            estante.append(new_livro)
             tempo()
         elif opcao == 2:
             name = input('Digite o nome do livro: ')
             author = input('Digite o nome do autor: ')
-            livro = Livro(name=name, author=author)
-            estante.prepend(livro)
+            new_livro = Livro(name=name, author=author)
+            estante.prepend(new_livro)
             tempo()
         elif opcao == 3:
             estante.remove_last()
@@ -174,16 +226,28 @@ def main():
             estante.remove(name)
             tempo()
         elif opcao == 7:
-            estante.revision()
+            name = input('Digite o nome do livro: ')
+            author = input('Digite o nome do autor: ')
+            index = int(input('Digite a posição que deseja colocar o livro: '))
+            estante.add_node_at_index(index, name, author)
             tempo()
         elif opcao == 8:
+            estante.revision()
+            tempo()
+        elif opcao == 9:
+            index = int(input('Digite a posição que deseja remover o livro: '))
+            estante.remove_at_index(index)
+            tempo()
+        elif opcao == 10:
+            print('=' * 55)
+            print('Obrigado por usar o programa!')
+            print('=' * 55)
             break
         else:
+            print('=' * 55)
             print('Opção inválida!')
-            tempo()
+            print('=' * 55)
 
 def tempo():
     time.sleep(3)
-
-
 main()
